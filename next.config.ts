@@ -1,6 +1,19 @@
 import type {NextConfig} from 'next';
 
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+let basePath = '';
+
+if (isGithubActions && process.env.GITHUB_REPOSITORY) {
+  const repo = process.env.GITHUB_REPOSITORY.split('/')[1];
+  if (repo && !repo.endsWith('.github.io')) {
+    basePath = `/${repo}`;
+  }
+}
+
 const nextConfig: NextConfig = {
+  basePath: basePath,
+  assetPrefix: basePath,
+  trailingSlash: true,
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
